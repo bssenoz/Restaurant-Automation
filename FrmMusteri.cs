@@ -29,21 +29,34 @@ namespace PROJE2
 
         private void btnMusteriEkle_Click_1(object sender, EventArgs e)
         {
-            if (baglanti.State == ConnectionState.Closed)
-                baglanti.Open();
-            string ekle = "insert into musteriler (ad,soyad,tc_no,tel,adres,siparis_sayisi) values (@p1,@p2,@p7,@p3,@p4,@p5)";
-            NpgsqlCommand cmd = new NpgsqlCommand(ekle, baglanti);
-            cmd.Parameters.AddWithValue("@p1", textBox1.Text);
-            cmd.Parameters.AddWithValue("@p2", textBox2.Text);
-            cmd.Parameters.AddWithValue("@p7", textBox8.Text);
-            cmd.Parameters.AddWithValue("@p3", textBox3.Text);
-            cmd.Parameters.AddWithValue("@p4", textBox4.Text);
-            cmd.Parameters.AddWithValue("@p5", 0);
+            try
+            {
+                if (baglanti.State == ConnectionState.Closed)
+                    baglanti.Open();
+                string ekle = "call musteriEkle (:p_ad,:p_soyad,:p_tc_no,:p_tel,:p_adres,:p_siparis_sayisi)";
+                NpgsqlCommand cmd = new NpgsqlCommand(ekle, baglanti);
+                cmd.Parameters.AddWithValue(":p_tc_no", textBox8.Text);
+                if (textBox8.Text.Length != 11) MessageBox.Show("TC No 11 haneli olmalıdır!!");
+                else
+                {
+                    cmd.Parameters.AddWithValue(":p_ad", textBox1.Text);
+                    cmd.Parameters.AddWithValue(":p_soyad", textBox2.Text);
+                    cmd.Parameters.AddWithValue(":p_tel", textBox3.Text);
+                    cmd.Parameters.AddWithValue(":p_adres", textBox4.Text);
+                    cmd.Parameters.AddWithValue(":p_siparis_sayisi", 0);
+                    cmd.ExecuteNonQuery();
+                    baglanti.Close();
+                    MessageBox.Show("Müşteri Eklendi");
+                }
 
-            cmd.ExecuteNonQuery();
-            baglanti.Close();
-            MessageBox.Show("Yeni Müşteri Eklendi");
-            TextTemizle();
+                TextTemizle();
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
         }
 
         private void btnMusteriSorgula_Click(object sender, EventArgs e)

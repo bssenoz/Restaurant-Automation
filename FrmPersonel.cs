@@ -24,20 +24,31 @@ namespace PROJE2
 
         public void PersonelEkle()
         {
+            try
+            {
+                if (baglanti.State == ConnectionState.Closed)
+                    baglanti.Open();
+                string ekle = "call PersonelEkle (:p_tc_no,:p_ad,:p_soyad,:p_gorev_no,:p_maas)";
+                NpgsqlCommand cmd = new NpgsqlCommand(ekle, baglanti);
+                cmd.Parameters.AddWithValue(":p_tc_no", textBox1.Text);
+                if (textBox1.Text.Length != 11) MessageBox.Show("TC No 11 haneli olmalıdır!!");
+                else
+                {
+                    cmd.Parameters.AddWithValue(":p_ad", textBox2.Text);
+                    cmd.Parameters.AddWithValue(":p_soyad", textBox3.Text);
+                    cmd.Parameters.AddWithValue(":p_gorev_no", int.Parse(textBox4.Text));
+                    cmd.Parameters.AddWithValue(":p_maas", int.Parse(textBox5.Text));
+                    cmd.ExecuteNonQuery();
+                    baglanti.Close();
+                    MessageBox.Show("Personel Eklendi");
+                }
 
-            if (baglanti.State == ConnectionState.Closed)
-                baglanti.Open();
-            string ekle = "call PersonelEkle (:p_tc_no,:p_ad,:p_soyad,:p_gorev_no,:p_maas)";
-            NpgsqlCommand cmd = new NpgsqlCommand(ekle, baglanti);
-            cmd.Parameters.AddWithValue(":p_tc_no", textBox1.Text);
-            cmd.Parameters.AddWithValue(":p_ad", textBox2.Text);
-            cmd.Parameters.AddWithValue(":p_soyad", textBox3.Text);
-            cmd.Parameters.AddWithValue(":p_gorev_no", int.Parse(textBox4.Text));
-            cmd.Parameters.AddWithValue(":p_maas", int.Parse(textBox5.Text));
-            cmd.ExecuteNonQuery();
-            baglanti.Close();
-            MessageBox.Show("Personel Eklendi");
-            TextTemizle();
+                TextTemizle();
+
+              } catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
         }
         private void button1_Click(object sender, EventArgs e)
         {

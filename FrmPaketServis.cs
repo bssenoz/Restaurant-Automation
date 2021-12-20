@@ -46,7 +46,6 @@ namespace PROJE2
                 MessageBox.Show("Müşteri bulunamadı! Lütfen kayıt yapın.");
                 baglanti.Close();
                 TextTemizle();
-                comboBox1.Items.Clear();
             }
             else
             {
@@ -63,15 +62,6 @@ namespace PROJE2
                 }
                 int siparis_sayisi = int.Parse(siparisSayisi);
                 baglanti.Close();
-
-                //if (baglanti.State == ConnectionState.Closed)
-                //    baglanti.Open();
-                //string guncelle = "update musteriler set siparis_sayisi=siparis_sayisi+1 where musteri_no = @p1";
-                //NpgsqlCommand cmd2 = new NpgsqlCommand(guncelle, baglanti);
-                //cmd2.Parameters.AddWithValue("@p1", int.Parse(textBox1.Text));
-
-                //cmd2.ExecuteNonQuery();
-                //baglanti.Close();
 
                 if (baglanti.State == ConnectionState.Closed)
                     baglanti.Open();
